@@ -1,0 +1,25 @@
+{
+  "name": "punk-or-metal",
+  "description": "Punk or Metal?",
+  "main": "index.js",
+  "authors": [
+    "ccbayer <ccbayer@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/ccbayer/punk-or-metal",
+  "moduleType": [
+    "es6",
+    "globals",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "skeleton": "~2.0.4"
+  }
+}
