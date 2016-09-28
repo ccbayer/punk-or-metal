@@ -4,7 +4,9 @@
   "description": "Punk or Metal?",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run server & npm run watcher",
+    "server": "node app/app.js",
+    "watcher": "webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",
@@ -24,16 +26,13 @@
     "bower": "^1.7.9",
     "express": "^4.14.0",
     "react": "^15.3.2",
+    "react-addons-update": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router": "^2.8.1",
     "webpack": "^1.13.2"
   },
   "dependencies": {
-    "babel": "^6.5.2"
-  },
-  "scripts": {
-    "serve": "server && watcher",
-    "server": "node app/app.js",
-    "watcher": "webpack --progress --colors --watch"
+    "babel": "^6.5.2",
+    "re-base": "^2.2.0"
   }
 }
