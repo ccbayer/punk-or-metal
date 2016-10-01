@@ -2,6 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var update = require('react-addons-update');
 
+require('./app/scss/main.scss');
 
 // Firebase
 var Rebase = require('re-base');
@@ -49,6 +50,13 @@ var App = React.createClass({
     }
     return genreAlbums;
   },
+  addAlbum : function(album) {
+    var timestamp = (new Date()).getTime();
+    // update the state object
+    this.state.albums['album-' + timestamp] = album;
+    // set the state
+    this.setState({ albums : this.state.albums });
+  },
   castVote: function(key) {
     var currentItem = this.state.matchup[key];
 
@@ -77,16 +85,25 @@ var App = React.createClass({
     this.setState({ matchup : thisMatchup });
   },
   render : function() {
-    return (
-      <div>
-        <button onClick={this.createMatchup}>FIGHT</button>
-        <div className="Matchup">
-          <ShowMatchup genre="punk" matchup={this.state.matchup.punk} castVote={this.castVote}/>
-          - vs - 
-          <ShowMatchup genre="metal" matchup={this.state.matchup.metal}/>
+    if(!this.state.matchup.punk) {
+      return (
+        <div>
+          <button onClick={this.createMatchup}>FIGHT</button>
+          <AddAlbumForm addAlbum={this.addAlbum} />
         </div>
-      </div>
-    )
+      )
+    } else { 
+      return (
+        <div>
+          <div className="Matchup">
+            <ShowMatchup genre="punk" matchup={this.state.matchup.punk} castVote={this.castVote}/>
+            - vs - 
+            <ShowMatchup genre="metal" matchup={this.state.matchup.metal} castVote={this.castVote}/>
+          </div>
+          <AddAlbumForm addAlbum={this.addAlbum} />
+        </div>
+      )
+    }
   }
 });
 
@@ -118,6 +135,39 @@ var ShowAlbum = React.createClass({
         <p>votes: {this.props.album.votes}</p>
         <button onClick={this.voteClick}>Vote for {this.props.album.name}</button>
       </div>
+    )
+  }
+});
+
+var AddAlbumForm = React.createClass({
+  createAlbum: function(event) {
+    event.preventDefault();
+    var album = {
+      name: this.refs.name.value,
+      artist: this.refs.artist.value,
+      genre: this.refs.genre.value,
+      image: this.refs.image.value
+    };
+    this.props.addAlbum(album);
+    // clear form
+    this.refs.albumForm.reset();
+  },
+  render: function() {
+    return (
+      <form ref="albumForm" id="albumForm" onSubmit={this.createAlbum}>
+        <label htmlFor="name">Album Name</label>
+        <input type="text" id="name" ref="name"/>
+        <label htmlFor="artist">Artist</label>
+        <input type="text" id="artist" ref="artist"/>
+        <fieldset>
+          <legend>Genre</legend>
+            <label htmlFor="punk"><input type="radio" ref="genre" id="punk" value="Punk"/>Punk</label>
+            <label htmlFor="metal"><input type="radio" ref="genre" id="metal" value="Metal"/>Metal</label>
+        </fieldset>
+        <label htmlFor="image">Album Artwork (URL)</label>
+        <input type="text" id="image" ref="image"/>
+        <input type="submit" value="Add Album" className="btn"/>
+      </form>
     )
   }
 });
